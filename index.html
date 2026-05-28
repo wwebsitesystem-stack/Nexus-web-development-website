@@ -3,204 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Web Development | AI-Powered Digital Infrastructure</title>
+    <title>Nexus Engine | Live AI Generation</title>
     <style>
-        /* CSS Variables for an "Expensive" Dark Theme */
         :root {
-            --bg-color: #050505;
+            --bg-dark: #000000;
+            --bg-panel: #0a0a0a;
+            --border: #222222;
             --text-main: #ffffff;
-            --text-muted: #888888;
+            --text-dim: #888888;
             --accent: #ffffff;
-            --border-color: #222222;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        /* Navigation */
-        nav {
+        /* Sidebar UI */
+        .sidebar {
+            width: 360px;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem 5%;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
+        .back-link {
+            color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-size: 0.85rem;
         }
 
-        .nav-links a:hover {
-            color: var(--text-main);
-        }
-
-        .btn-primary {
-            background-color: var(--accent);
-            color: var(--bg-color);
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            opacity: 0.8;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
+        .chat-area {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 5%;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            gap: 1.5rem;
         }
 
-        .hero h1 {
-            font-size: 4.5rem;
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(180deg, #FFFFFF 0%, #777777 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-        }
-
-        /* Features Section (Mocking the AI Platforms) */
-        .features {
-            padding: 8rem 5%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 4rem;
-        }
-
-        .feature-card {
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            padding: 3rem;
-            border-radius: 8px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: #444;
-        }
-
-        .feature-card h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .feature-card p {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .feature-link {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 600;
-            border-bottom: 1px solid var(--text-main);
-            padding-bottom: 2px;
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem 5%;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
+        .message {
             font-size: 0.9rem;
+            line-height: 1.5;
+            max-width: 85%;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            .nav-links { display: none; }
+        .message.ai {
+            color: var(--text-dim);
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background-color: var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-main);
+            align-self: flex-end;
+        }
+
+        .prompt-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .prompt-box {
+            display: flex;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .prompt-box input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            padding: 1rem;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .prompt-box button {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            padding: 0 1.25rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Workspace UI */
+        .workspace {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-dark);
+        }
+
+        .workspace-header {
+            display: flex;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            gap: 2rem;
+            background: var(--bg-panel);
+        }
+
+        .tab {
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: var(--text-main);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .view-container {
+            flex-grow: 1;
+            position: relative;
+            background: #050505;
+        }
+
+        .view-pane {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .view-pane.active {
+            display: block;
+        }
+
+        /* Code View Styling */
+        textarea.code-window {
+            width: 100%;
+            height: 100%;
+            background-color: #050505;
+            color: #a9b7c6;
+            border: none;
+            padding: 2rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        /* Preview View Styling */
+        iframe.preview-window {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+        }
+
+        .status-bar {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            font-style: italic;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">Nexus.</div>
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#ai-websites">AI Web Builder</a>
-            <a href="#ai-apps">AI App Builder</a>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span>Nexus Engine v1.0</span>
+            <a href="index.html" class="back-link">Exit Workspace</a>
         </div>
-        <a href="#contact" class="btn-primary">Start Building</a>
-    </nav>
-
-    <section class="hero" id="home">
-        <h1>Code at the speed of thought.</h1>
-        <p>Nexus Web Development powers the next generation of digital infrastructure. Build websites and applications instantly with our AI-driven architecture.</p>
-        <a href="#services" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">Explore Platforms</a>
-    </section>
-
-    <section class="features" id="services">
-        <div class="feature-card" id="ai-websites">
-            <h2>Nexus Web Builder</h2>
-            <p>Generate high-converting, premium landing pages in seconds. Describe your business in plain English, and our AI drafts the layout, writes the copy, and optimizes it for SEO.</p>
-            <a href="web-builder.html" class="feature-link">Launch Web Platform &rarr;</a>
+        
+        <div class="chat-area" id="chatHistory">
+            <div class="message ai">
+                System online. Tell me what kind of landing page or layout you want to generate, and I'll build it live.
+            </div>
         </div>
 
-        <div class="feature-card" id="ai-apps">
-            <h2>Nexus App Engine</h2>
-            <p>From concept to fully functional application. Our AI agent sets up your frontend, backend logic, data models, and user authentication instantly. No code required.</p>
-            <a href="app-engine.html" class="feature-link">Launch App Engine &rarr;</a>
+        <div class="prompt-container">
+            <div class="status-bar" id="statusBar">Compiling codebase...</div>
+            <div class="prompt-box">
+                <input type="text" id="promptInput" placeholder="e.g., minimalist dark coffee shop landing page" autocomplete="off">
+                <button id="generateBtn">&rarr;</button>
+            </div>
         </div>
-    </section>
+    </aside>
 
-    <footer>
-        <p>&copy; 2026 Nexus Web Development. All rights reserved.</p>
-    </footer>
+    <main class="workspace">
+        <div class="workspace-header">
+            <div class="tab active" onclick="switchTab('code')">Source Code</div>
+            <div class="tab" onclick="switchTab('preview')">Live Preview</div>
+        </div>
+        
+        <div class="view-container">
+            <div class="view-pane active" id="codePane">
+                <textarea class="code-window" id="codeTextArea" readonly><!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            background: #000; 
+            color: #333; 
+            font-family: sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+        h1 { color: #555; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <h1>Awaiting generation instructions...</h1>
+</body>
+</html></textarea>
+            </div>
 
+            <div class="view-pane" id="previewPane">
+                <iframe class="preview-window" id="previewFrame"></iframe>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const promptInput = document.getElementById('promptInput');
+        const chatHistory = document.getElementById('chatHistory');
+        const codeTextArea = document.getElementById('codeTextArea');
+        const previewFrame = document.getElementById('previewFrame');
+        const statusBar = document.getElementById('statusBar');
+
+        // Render initial default empty state into the iframe preview window
+        updatePreview();
+
+        function updatePreview() {
+            const frameDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            frameDoc.open();
+            frameDoc.write(codeTextArea.value);
+            frameDoc.close();
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('codePane').classList.remove('active');
+            document.getElementById('previewPane').classList.remove('active');
+
+            if (tabName === 'code') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('codePane').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('previewPane').classList.add('active');
+                updatePreview(); // Sync latest code alterations to the view screen
+            }
+        }
+
+        generateBtn.addEventListener('click', () => {
+            const rawPrompt = promptInput.value.trim();
+            if (!rawPrompt) return;
+
+            // Log User prompt query UI bubble
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.textContent = rawPrompt;
+            chatHistory.appendChild(userMsg);
+            
+            promptInput.value = '';
+            statusBar.style.display = 'block';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Simple client-side generation rules parsing the prompt text
+            setTimeout(() => {
+                statusBar.style.display = 'none';
+                
+                const promptLower = rawPrompt.toLowerCase();
+                let themeBg = "#ffffff";
+                let themeText = "#111111";
+                let accentColor = "#0070f3";
+                let titleName = "Generated Project";
+                let description = "Engineered seamlessly via custom user parameters.";
+
+                // Check for styling requests
+                if (promptLower.includes('dark') || promptLower.includes('black')) {
+                    themeBg = "#0b0b0f";
+                    themeText = "#f4f4f5";
+                    accentColor = "#ffffff";
+                }
+                if (promptLower.includes('coffee') || promptLower.includes('cafe')) {
+                    titleName = "The Espresso Lounge";
+                    description = "Premium hand-roasted micro-lot coffee delivered directly to your doorstep.";
+                    accentColor = "#c19a6b";
+                } else if (promptLower.includes('portfolio') || promptLower.includes('creative')) {
+                    titleName = "Alex Morgan | Creative Developer";
+                    description = "Specializing in bleeding edge interactions and complex interface design patterns.";
+                } else if (promptLower.includes('green') || promptLower.includes('neon')) {
+                    accentColor = "#39ff14";
+                }
+
+                // Compile the structural template using the custom rules computed above
+                const generatedHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${titleName}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: ${themeBg}; 
+            color: ${themeText}; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .wrapper { max-width: 600px; }
+        h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
+        p { font-size: 1.2rem; opacity: 0.8; margin-bottom: 2rem; line-height: 1.5; }
+        .cta-btn { 
+            display: inline-block;
+            background: ${accentColor}; 
+            color: ${themeBg === '#ffffff' ? '#ffffff' : '#000000'};
+            padding: 0.8rem 2rem; 
+            font-weight: 600; 
+            border-radius: 6px; 
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>${titleName}</h1>
+        <p>${description}</p>
+        <a href="#" class="cta-btn">Get Started</a>
+    </div>
+</body>
+</html>`;
+
+                // Write text content directly to the source element window
+                codeTextArea.value = generatedHTML;
+
+                // Log system completion AI bubble back to UI log standard output
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai';
+                aiMsg.textContent = "Interface architecture compiled successfully. Click the 'Live Preview' tab to view execution outputs.";
+                chatHistory.appendChild(aiMsg);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+
+                // Auto display generated visual design instantly
+                switchTab('preview');
+
+            }, 1200);
+        });
+
+        // Event listener mapping enter key execution triggers
+        promptInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') generateBtn.click();
+        });
+    </script>
 </body>
 </html>
