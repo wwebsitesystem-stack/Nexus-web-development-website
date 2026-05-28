@@ -3,417 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Engine | Firebase Integrated</title>
+    <title>Nexus Web Development | Next-Gen AI Infrastructure</title>
     <style>
         :root {
-            --bg-dark: #000000;
-            --bg-panel: #0a0a0a;
-            --border: #222222;
+            --bg-color: #030303;
             --text-main: #ffffff;
-            --text-dim: #888888;
+            --text-muted: #666666;
             --accent: #ffffff;
+            --border-color: #1a1a1a;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
             color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Sidebar UI */
-        .sidebar {
-            width: 360px;
-            background-color: var(--bg-panel);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
+        /* Premium Ambient Background Blur */
+        .ambient-glow {
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            font-weight: 600;
+        /* Navigation */
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1.75rem 5%;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(3, 3, 3, 0.7);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
         }
 
-        .back-link {
-            color: var(--text-dim);
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
             text-decoration: none;
             font-size: 0.85rem;
-        }
-
-        .chat-area {
-            flex-grow: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .message {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            max-width: 85%;
-        }
-
-        .message.ai {
-            color: var(--text-dim);
-            align-self: flex-start;
-        }
-
-        .message.user {
-            background-color: var(--border);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            color: var(--text-main);
-            align-self: flex-end;
-        }
-
-        .prompt-container {
-            padding: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .prompt-box {
-            display: flex;
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .prompt-box input {
-            flex-grow: 1;
-            background: transparent;
-            border: none;
-            padding: 1rem;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        .prompt-box button {
-            background: var(--accent);
-            color: var(--bg-dark);
-            border: none;
-            padding: 0 1.25rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Workspace UI */
-        .workspace {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-dark);
-        }
-
-        .workspace-header {
-            display: flex;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid var(--border);
-            gap: 2rem;
-            background: var(--bg-panel);
-        }
-
-        .tab {
-            color: var(--text-dim);
-            cursor: pointer;
-            font-size: 0.9rem;
-            padding-bottom: 0.5rem;
             font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
         }
 
-        .tab.active {
+        .nav-links a:hover {
             color: var(--text-main);
-            border-bottom: 2px solid var(--accent);
         }
 
-        .view-container {
-            flex-grow: 1;
-            position: relative;
-            background: #050505;
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            padding: 0.6rem 1.25rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: opacity 0.3s ease;
         }
 
-        .view-pane {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
+        .btn-primary:hover {
+            opacity: 0.85;
         }
 
-        .view-pane.active {
-            display: block;
-        }
-
-        textarea.code-window {
-            width: 100%;
-            height: 100%;
-            background-color: #050505;
-            color: #a9b7c6;
-            border: none;
-            padding: 2rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            resize: none;
-            outline: none;
-            line-height: 1.5;
-        }
-
-        iframe.preview-window {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #ffffff;
-        }
-
-        .status-bar {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin-bottom: 0.5rem;
-            font-style: italic;
-            display: none;
-        }
-    </style>
-</head>
-<body>
-
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <span>Nexus Engine v1.0</span>
-            <a href="index.html" class="back-link">Exit Workspace</a>
-        </div>
-        
-        <div class="chat-area" id="chatHistory">
-            <div class="message ai">
-                System online. Database synced with Firebase active infrastructure. Tell me what to build.
-            </div>
-        </div>
-
-        <div class="prompt-container">
-            <div class="status-bar" id="statusBar">Syncing to Firebase Realtime Cloud...</div>
-            <div class="prompt-box">
-                <input type="text" id="promptInput" placeholder="e.g., minimalist dark coffee shop landing page" autocomplete="off">
-                <button id="generateBtn">&rarr;</button>
-            </div>
-        </div>
-    </aside>
-
-    <main class="workspace">
-        <div class="workspace-header">
-            <div class="tab active" id="tab-code">Source Code</div>
-            <div class="tab" id="tab-preview">Live Preview</div>
-        </div>
-        
-        <div class="view-container">
-            <div class="view-pane active" id="codePane">
-                <textarea class="code-window" id="codeTextArea" readonly><!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { background: #000; color: #333; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        h1 { color: #555; font-size: 1.5rem; }
-    </style>
-</head>
-<body>
-    <h1>Awaiting generation instructions...</h1>
-</body>
-</html></textarea>
-            </div>
-
-            <div class="view-pane" id="previewPane">
-                <iframe class="preview-window" id="previewFrame"></iframe>
-            </div>
-        </div>
-    </main>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // Your Web App Configuration Matrix
-        const firebaseConfig = {
-            apiKey: "AIzaSyAO_ffupJOIMPE9m4ARtaqSzC1vGDkIAco",
-            authDomain: "nexus-web-development-official.firebaseapp.com",
-            databaseURL: "https://nexus-web-development-official-default-rtdb.firebaseio.com",
-            projectId: "nexus-web-development-official",
-            storageBucket: "nexus-web-development-official.firebasestorage.app",
-            messagingSenderId: "553556577139",
-            appId: "1:553556577139:web:6f08c85297c3328f999306",
-            measurementId: "G-3XK0BCBDVE"
-        };
-
-        // Initialize App & Analytics instance targets
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const database = getDatabase(app);
-
-        // UI Access Nodes
-        const generateBtn = document.getElementById('generateBtn');
-        const promptInput = document.getElementById('promptInput');
-        const chatHistory = document.getElementById('chatHistory');
-        const codeTextArea = document.getElementById('codeTextArea');
-        const previewFrame = document.getElementById('previewFrame');
-        const statusBar = document.getElementById('statusBar');
-
-        // Render baseline iframe data footprint
-        updatePreview();
-
-        function updatePreview() {
-            const frameDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-            frameDoc.open();
-            frameDoc.write(codeTextArea.value);
-            frameDoc.close();
-        }
-
-        window.switchTab = function(tabName) {
-            document.getElementById('tab-code').classList.remove('active');
-            document.getElementById('tab-preview').classList.remove('active');
-            document.getElementById('codePane').classList.remove('active');
-            document.getElementById('previewPane').classList.remove('active');
-
-            if (tabName === 'code') {
-                document.getElementById('tab-code').classList.add('active');
-                document.getElementById('codePane').classList.add('active');
-            } else {
-                document.getElementById('tab-preview').classList.add('active');
-                document.getElementById('previewPane').classList.add('active');
-                updatePreview();
-            }
-        }
-
-        document.getElementById('tab-code').addEventListener('click', () => switchTab('code'));
-        document.getElementById('tab-preview').addEventListener('click', () => switchTab('preview'));
-
-        generateBtn.addEventListener('click', async () => {
-            const rawPrompt = promptInput.value.trim();
-            if (!rawPrompt) return;
-
-            // Paint user prompt context to client screen state
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.textContent = rawPrompt;
-            chatHistory.appendChild(userMsg);
-            
-            promptInput.value = '';
-            statusBar.style.display = 'block';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            // Standard parsing matrix variables
-            const promptLower = rawPrompt.toLowerCase();
-            let themeBg = "#ffffff";
-            let themeText = "#111111";
-            let accentColor = "#0070f3";
-            let titleName = "Generated Project";
-            let description = "Engineered seamlessly via custom user parameters.";
-
-            if (promptLower.includes('dark') || promptLower.includes('black')) {
-                themeBg = "#0b0b0f";
-                themeText = "#f4f4f5";
-                accentColor = "#ffffff";
-            }
-            if (promptLower.includes('coffee') || promptLower.includes('cafe')) {
-                titleName = "The Espresso Lounge";
-                description = "Premium hand-roasted micro-lot coffee delivered directly to your doorstep.";
-                accentColor = "#c19a6b";
-            } else if (promptLower.includes('portfolio') || promptLower.includes('creative')) {
-                titleName = "Alex Morgan | Creative Developer";
-                description = "Specializing in bleeding edge interactions and complex interface design patterns.";
-            } else if (promptLower.includes('green') || promptLower.includes('neon')) {
-                accentColor = "#39ff14";
-            }
-
-            const generatedHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${titleName}</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: ${themeBg}; 
-            color: ${themeText}; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        /* Hero Section */
+        .hero {
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            align-items: center;
             text-align: center;
-            padding: 2rem;
+            padding: 0 5%;
+            position: relative;
+            z-index: 1;
         }
-        .wrapper { max-width: 600px; }
-        h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
-        p { font-size: 1.2rem; opacity: 0.8; margin-bottom: 2rem; line-height: 1.5; }
-        .cta-btn { 
-            display: inline-block;
-            background: ${accentColor}; 
-            color: ${themeBg === '#ffffff' ? '#ffffff' : '#000000'};
-            padding: 0.8rem 2rem; 
-            font-weight: 600; 
-            border-radius: 6px; 
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(180deg, #FFFFFF 0%, #555555 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 540px;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        /* Features/Offerings Matrix */
+        .grid-section {
+            padding: 0 5% 8rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #080808;
+            border: 1px solid var(--border-color);
+            padding: 3rem;
+            border-radius: 6px;
+            transition: border-color 0.4s ease, transform 0.4s ease;
+        }
+
+        .card:hover {
+            border-color: #333333;
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .card-link {
+            color: var(--text-main);
             text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-link span {
+            transition: transform 0.2s ease;
+        }
+
+        .card-link:hover span {
+            transform: translateX(4px);
+        }
+
+        footer {
+            padding: 4rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: #333333;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.2rem; letter-spacing: -1.5px; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <h1>${titleName}</h1>
-        <p>${description}</p>
-        <a href="#" class="cta-btn">Get Started</a>
-    </div>
-</body>
-</html>`;
 
-            // --- Realtime Firebase Data Storage Pipeline ---
-            try {
-                const historyRef = ref(database, 'generations');
-                const newGenerationRef = push(historyRef);
-                await set(newGenerationRef, {
-                    prompt: rawPrompt,
-                    compiledHTML: generatedHTML,
-                    timestamp: Date.now()
-                });
-                console.log("Transmission Successful: Log saved into Firebase.");
-            } catch (error) {
-                console.error("Transmission Error to Cloud Base:", error);
-            }
+    <div class="ambient-glow"></div>
 
-            // Update DOM and display UI changes locally after successful database execution
-            setTimeout(() => {
-                statusBar.style.display = 'none';
-                codeTextArea.value = generatedHTML;
+    <nav>
+        <div class="logo">Nexus</div>
+        <div class="nav-links">
+            <a href="#">Platform</a>
+            <a href="#engine">Engine</a>
+            <a href="#">Enterprise</a>
+        </div>
+        <a href="builder.html" class="btn-primary">Launch Console</a>
+    </nav>
 
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai';
-                aiMsg.textContent = "Data synced across clusters. Preview environment updated.";
-                chatHistory.appendChild(aiMsg);
-                chatHistory.scrollTop = chatHistory.scrollHeight;
+    <section class="hero">
+        <h1>Engineered to build.</h1>
+        <p>Nexus is the high-end generative workspace providing instantaneous web construction workflows controlled entirely by text parameters.</p>
+        <a href="builder.html" class="btn-primary" style="padding: 0.9rem 2.25rem; font-size: 0.95rem; border-radius: 6px;">Open Engine Console</a>
+    </section>
 
-                switchTab('preview');
-            }, 800);
-        });
+    <section class="grid-section" id="engine">
+        <div class="grid">
+            <div class="card">
+                <h2>AI Design System</h2>
+                <p>Deploy custom user interfaces, layout trees, and color models using stateful cloud generation structures.</p>
+                <a href="builder.html" class="card-link">Initialize Core Engine <span>&rarr;</span></a>
+            </div>
+            <div class="card">
+                <h2>Realtime Cloud Sync</h2>
+                <p>Connected natively into live Firebase instances to dynamically index and preserve generated assets instantly.</p>
+                <a href="builder.html" class="card-link">Review Sync Pipeline <span>&rarr;</span></a>
+            </div>
+        </div>
+    </section>
 
-        promptInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') generateBtn.click();
-        });
-    </script>
+    <footer>
+        &copy; 2026 NEXUS WEB DEVELOPMENT. GLOBAL INFRASTRUCTURE AUTOMATION.
+    </footer>
+
 </body>
 </html>
