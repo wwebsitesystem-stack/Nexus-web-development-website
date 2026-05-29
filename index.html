@@ -3,243 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Web Development | Next-Gen AI Infrastructure</title>
+    <title>Nexus Web Development | Meta Builder Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --bg-color: #030303;
-            --text-main: #ffffff;
-            --text-muted: #666666;
-            --accent: #ffffff;
-            --border-color: #1a1a1a;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Premium Ambient Background Blur */
-        .ambient-glow {
-            position: absolute;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.75rem 5%;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(3, 3, 3, 0.7);
-            backdrop-filter: blur(12px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-main);
-        }
-
-        .btn-primary {
-            background-color: var(--accent);
-            color: var(--bg-color);
-            padding: 0.6rem 1.25rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            opacity: 0.85;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 5%;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: -3px;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(180deg, #FFFFFF 0%, #555555 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            max-width: 540px;
-            margin-bottom: 3rem;
-            font-weight: 400;
-        }
-
-        /* Features/Offerings Matrix */
-        .grid-section {
-            padding: 0 5% 8rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: #080808;
-            border: 1px solid var(--border-color);
-            padding: 3rem;
-            border-radius: 6px;
-            transition: border-color 0.4s ease, transform 0.4s ease;
-        }
-
-        .card:hover {
-            border-color: #333333;
-            transform: translateY(-2px);
-        }
-
-        .card h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-        }
-
-        .card-link {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-link span {
-            transition: transform 0.2s ease;
-        }
-
-        .card-link:hover span {
-            transform: translateX(4px);
-        }
-
-        footer {
-            padding: 4rem 5%;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            color: #333333;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3.2rem; letter-spacing: -1.5px; }
-            .nav-links { display: none; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
-<body>
+<body class="bg-[#090D16] text-gray-100 min-h-screen flex flex-col antialiased selection:bg-blue-600">
 
-    <div class="ambient-glow"></div>
-
-    <nav>
-        <div class="logo">Nexus</div>
-        <div class="nav-links">
-            <a href="#">Platform</a>
-            <a href="#engine">Engine</a>
-            <a href="#">Enterprise</a>
-        </div>
-        <a href="builder.html" class="btn-primary">Launch Console</a>
-    </nav>
-
-    <section class="hero">
-        <h1>Engineered to build.</h1>
-        <p>Nexus is the high-end generative workspace providing instantaneous web construction workflows controlled entirely by text parameters.</p>
-        <a href="builder.html" class="btn-primary" style="padding: 0.9rem 2.25rem; font-size: 0.95rem; border-radius: 6px;">Open Engine Console</a>
-    </section>
-
-    <section class="grid-section" id="engine">
-        <div class="grid">
-            <div class="card">
-                <h2>AI Design System</h2>
-                <p>Deploy custom user interfaces, layout trees, and color models using stateful cloud generation structures.</p>
-                <a href="builder.html" class="card-link">Initialize Core Engine <span>&rarr;</span></a>
+    <div id="app" class="min-h-screen flex flex-col">
+        
+        <header class="border-b border-gray-800 bg-[#0F172A] px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 p-2 rounded-xl text-white">
+                    <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-black tracking-wider text-white">
+                        NEXUS <span class="text-blue-500 font-medium text-xs tracking-widest uppercase ml-1">WEB DEV</span>
+                    </span>
+                </div>
             </div>
-            <div class="card">
-                <h2>Realtime Cloud Sync</h2>
-                <p>Connected natively into live Firebase instances to dynamically index and preserve generated assets instantly.</p>
-                <a href="builder.html" class="card-link">Review Sync Pipeline <span>&rarr;</span></a>
+
+            <div class="flex items-center space-x-4">
+                <input 
+                    type="text" 
+                    id="projectTitleInput"
+                    value="Nexus Architecture Layout"
+                    class="bg-[#1E293B] border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-blue-500 w-48 transition-all"
+                    placeholder="Project Title"
+                />
+                <button 
+                    id="saveProjectBtn"
+                    class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
+                >
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                    <span>Save Workspace</span>
+                </button>
+
+                <div id="authWidgetContainer">
+                    <button 
+                        id="openAuthModalBtn"
+                        class="flex items-center space-x-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-all"
+                    >
+                        <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                        <span>Access Account</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 flex overflow-hidden">
+            
+            <aside class="w-72 bg-[#0F172A] border-r border-gray-800 flex flex-col">
+                <div class="p-4 border-b border-gray-800">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center space-x-2">
+                        <i data-lucide="database" class="w-3.5 h-3.5 text-blue-500"></i>
+                        <span>Cloud Deployments</span>
+                    </h3>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Live configuration nodes synced with your deployment account.</p>
+                </div>
+                <div id="projectListFeed" class="flex-1 p-3 overflow-y-auto space-y-2 custom-scrollbar">
+                    <div class="text-center py-8 border border-dashed border-gray-800 rounded-xl px-2">
+                        <p class="text-xs text-gray-500">No active network data streaming.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="flex-1 bg-[#090D16] p-6 overflow-y-auto flex flex-col items-center custom-scrollbar">
+                <div id="liveWebPreviewCanvas" class="w-full max-w-3xl bg-white text-gray-900 min-h-[550px] shadow-2xl flex flex-col overflow-hidden rounded-xl transition-all duration-300">
+                    <div class="flex-1 flex flex-col items-center justify-center p-12 text-center bg-gray-50">
+                        <div class="p-4 bg-blue-50 text-blue-600 rounded-2xl mb-3">
+                            <i data-lucide="layers" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-gray-800">Workspace Sandbox Canvas is Clear</h4>
+                        <p class="text-xs text-gray-500 max-w-xs mt-1">Interact with your structural nodes from the component library options panel positioned directly below.</p>
+                    </div>
+                </div>
+
+                <div class="w-full max-w-3xl mt-6 bg-[#0F172A] border border-gray-800 rounded-xl p-4 flex justify-between items-center shadow-lg">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="palette" class="w-4 h-4 text-blue-500"></i>
+                        <span class="text-xs font-bold text-gray-300">Layout Toolkit:</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="canvasEngine.addComponent('hero')" class="bg-[#1E293B] hover:bg-[#2D3748] border border-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all flex items-center space-x-1">
+                            <i data-lucide="plus" class="w-3 h-3"></i><span>Hero</span>
+                        </button>
+                        <button onclick="canvasEngine.addComponent('features')" class="bg-[#1E293B] hover:bg-[#2D3748] border border-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all flex items-center space-x-1">
+                            <i data-lucide="plus" class="w-3 h-3"></i><span>Features</span>
+                        </button>
+                        <button onclick="canvasEngine.addComponent('cta')" class="bg-[#1E293B] hover:bg-[#2D3748] border border-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all flex items-center space-x-1">
+                            <i data-lucide="plus" class="w-3 h-3"></i><span>CTA Strip</span>
+                        </button>
+                        <button onclick="canvasEngine.addComponent('footer')" class="bg-[#1E293B] hover:bg-[#2D3748] border border-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all flex items-center space-x-1">
+                            <i data-lucide="plus" class="w-3 h-3"></i><span>Footer</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div id="authGateModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div class="bg-[#0F172A] border border-gray-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl">
+                <button id="closeAuthModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors text-sm">✕</button>
+
+                <div class="text-center mb-6">
+                    <h3 id="modalDisplayTitle" class="text-lg font-bold text-white tracking-wide">Nexus Account Gateway</h3>
+                    <p class="text-xs text-gray-400 mt-1">Unified Authentication Environment</p>
+                </div>
+
+                <div id="authStatusAlert" class="hidden p-3 rounded-lg text-xs font-medium mb-4"></div>
+
+                <form id="nexusCredentialForm" class="space-y-4">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Email Coordinates</label>
+                        <input type="email" id="authEmailField" required placeholder="name@company.com" class="w-full bg-[#1E293B] border border-gray-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div id="passwordInputContainer">
+                        <div class="flex justify-between items-center mb-1">
+                          <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Security Token Password</label>
+                          <button type="button" onclick="authUI.switchMode('reset')" class="text-[11px] text-blue-400 hover:underline">Reset Vector?</button>
+                        </div>
+                        <input type="password" id="authPasswordField" placeholder="••••••••" class="w-full bg-[#1E293B] border border-gray-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div id="phoneInputContainer" class="hidden">
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Mobile Telephone String</label>
+                        <input type="tel" id="authPhoneField" placeholder="+1 (555) 000-0000" class="w-full bg-[#1E293B] border border-gray-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <button type="submit" id="submitActionBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all">
+                        Execute Core Handshake
+                    </button>
+                </form>
+
+                <div id="identityProviderDivider">
+                    <div class="relative my-5 text-center">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-800"></div></div>
+                        <span class="relative bg-[#0F172A] px-3 text-[10px] uppercase font-bold text-gray-500 tracking-widest">Federations</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="googleFederationBtn" class="flex items-center justify-center space-x-2 bg-[#1E293B] hover:bg-gray-700 border border-gray-700 rounded-xl p-2.5 text-xs text-white transition-all">
+                            <span>Google Auth</span>
+                        </button>
+                        <button type="button" onclick="authUI.switchMode('phone')" class="flex items-center justify-center space-x-2 bg-[#1E293B] hover:bg-gray-700 border border-gray-700 rounded-xl p-2.5 text-xs text-white transition-all">
+                            <span>SMS Phone</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-5 text-center text-xs border-t border-gray-800/60 pt-4" id="modalToggleFooter">
+                    <p class="text-gray-400">First build cycle? <button onclick="authUI.switchMode('register')" class="text-blue-400 hover:underline">Instantiate Profile</button></p>
+                </div>
             </div>
         </div>
-    </section>
 
-    <footer>
-        &copy; 2026 NEXUS WEB DEVELOPMENT. GLOBAL INFRASTRUCTURE AUTOMATION.
-    </footer>
+    </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, GoogleAuthProvider, signInWithPopup, signOut, 
+            sendPasswordResetEmail, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Provided Web Credentials Setup Block Matrix
+        const firebaseConfig = {
+            apiKey: "AIzaSyAO_ffupJOIMPE9m4ARtaqSzC1vGDkIAco",
+            authDomain: "nexus-web-development-official.firebaseapp.com",
+            databaseURL: "https://nexus-web-development-official-default-rtdb.firebaseio.com",
+            projectId: "nexus-web-development-official",
+            storageBucket: "nexus-web-development-official.firebasestorage.app",
+            messagingSenderId: "553556577139",
+            appId: "1:553556577139:web:de5ce7e8da00cb30999306",
+            measurementId: "G-GJM3YYSHWN"
+        };
+
+        // Initialize Native Instances
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Local Application Layout Memory Array
+        let canvasSchema = [];
+        let globalUserContext = null;
+        let currentAuthMode = 'login'; // login | register | reset | phone
+
+        // COMPONENT PREVIEW RENDERING TEMPLATE UTILITY
+        const LayoutTemplates = {
+            hero: () => `
+                <div class="py-12 px-6 text-center bg-gray-50 border-b border-gray-100">
+                    <h1 class="text-3xl font-black text-gray-900 tracking-tight">Next-Gen Nexus Deployments</h1>
+                    <p class="mt-2 text-xs text-gray-600 max-w-md mx-auto">Dynamic real-time layout structures computed and processed directly through user space pipelines.</p>
+                    <button class="mt-4 px-4 py-2 text-xs font-bold text-white bg-blue-600 rounded-xl shadow-sm">Initialize Interface</button>
+                </div>`,
+            features: () => `
+                <div class="py-8 px-6 bg-white grid grid-cols-3 gap-4 border-b border-gray-100">
+                    ${[1, 2, 3].map(i => `
+                        <div class="p-4 border border-gray-100 rounded-xl bg-gray-50">
+                            <div class="w-5 h-5 flex items-center justify-center text-white mb-2 text-[10px] font-bold bg-blue-600 rounded-md">✓</div>
+                            <h5 class="font-bold text-gray-900 text-xs">Node Matrix ${i}</h5>
+                            <p class="text-[10px] text-gray-500 mt-1">Configured cloud arrays mapping variable strings live.</p>
+                        </div>
+                    `).join('')}
+                </div>`,
+            cta: () => `
+                <div class="py-8 px-6 text-white flex items-center justify-between bg-blue-600 border-b border-blue-700">
+                    <div>
+                        <h3 class="text-sm font-bold">Accelerate your software production framework</h3>
+                        <p class="text-[10px] opacity-80">Deploy standard interface configurations immediately.</p>
+                    </div>
+                    <button class="bg-white text-gray-900 text-xs font-bold px-3 py-1.5 rounded-lg shadow">Launch Module</button>
+                </div>`,
+            footer: () => `
+                <div class="py-4 px-6 bg-gray-900 text-gray-400 text-[10px] flex justify-between items-center">
+                    <span>Nexus Framework Architecture</span>
+                    <span class="text-gray-500">© 2026 Nexus Web Development</span>
+                </div>`
+        };
+
+        // RENDERING DOM CONTROLLER INTERFACE OBJECTS
+        window.canvasEngine = {
+            addComponent(type) {
+                const uniqueId = `${type}-${Date.now()}`;
+                canvasSchema.push({ id: uniqueId, type: type });
+                this.render();
+            },
+            removeComponent(id) {
+                canvasSchema = canvasSchema.filter(item => item.id !== id);
+                this.render();
+            },
+            render() {
+                const canvas = document.getElementById('liveWebPreviewCanvas');
+                if (canvasSchema.length === 0) {
+                    canvas.className = "w-full max-w-3xl bg-white text-gray-900 min-h-[550px] shadow-2xl flex flex-col overflow-hidden rounded-xl items-center justify-center p-12 text-center bg-gray-50";
+                    canvas.innerHTML = `
+                        <div class="p-4 bg-blue-50 text-blue-600 rounded-2xl mb-3"><i data-lucide="layers" class="w-6 h-6"></i></div>
+                        <h4 class="text-sm font-bold text-gray-800">Workspace Sandbox Canvas is Clear</h4>
+                        <p class="text-xs text-gray-500 max-w-xs mt-1">Interact with your structural nodes from the component library options panel positioned directly below.</p>
+                    `;
+                } else {
+                    canvas.className = "w-full max-w-3xl bg-white text-gray-900 min-h-[550px] shadow-2xl flex flex-col overflow-hidden rounded-xl";
+                    canvas.innerHTML = canvasSchema.map(item => `
+                        <div class="relative group">
+                            <div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex transition-opacity z-10 bg-white shadow rounded-lg p-1 border">
+                                <button onclick="canvasEngine.removeComponent('${item.id}')" class="p-1 text-gray-400 hover:text-red-500 transition-colors">
+                                    ✕
+                                </button>
+                            </div>
+                            ${LayoutTemplates[item.type]()}
+                        </div>
+                    `).join('');
+                }
+                lucide.createIcons();
+            }
+        };
+
+        // FIREBASE DYNAMIC ACCOUNT SYSTEM HANDLERS
+        window.authUI = {
+            showAlert(type, text) {
+                const container = document.getElementById('authStatusAlert');
+                container.className = `p-3 rounded-lg text-xs font-medium mb-4 ${type === 'error' ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'}`;
+                container.textContent = text;
+                container.classList.remove('hidden');
+            },
+            switchMode(mode) {
+                currentAuthMode = mode;
+                document.getElementById('authStatusAlert').classList.add('hidden');
+                
+                // Form element references
+                const passContainer = document.getElementById('passwordInputContainer');
+                const phoneContainer = document.getElementById('phoneInputContainer');
+                const title = document.getElementById('modalDisplayTitle');
+                const submitBtn = document.getElementById('submitActionBtn');
+                const footer = document.getElementById('modalToggleFooter');
+
+                passContainer.classList.remove('hidden');
+                phoneContainer.classList.add('hidden');
+
+                if (mode === 'login') {
+                    title.textContent = "Nexus Account Gateway";
+                    submitBtn.textContent = "Sign In Securely";
+                    footer.innerHTML = `<p class="text-gray-400">First build cycle? <button onclick="authUI.switchMode('register')" class="text-blue-400 hover:underline">Instantiate Profile</button></p>`;
+                } else if (mode === 'register') {
+                    title.textContent = "Create Nexus Identity";
+                    submitBtn.textContent = "Provision Access Token";
+                    footer.innerHTML = `<p class="text-gray-400">Already verified? <button onclick="authUI.switchMode('login')" class="text-blue-400 hover:underline">Log in</button></p>`;
+                } else if (mode === 'reset') {
+                    title.textContent = "Vector Password Recovery";
+                    submitBtn.textContent = "Dispatch Reset Email";
+                    passContainer.classList.add('hidden');
+                    footer.innerHTML = `<button onclick="authUI.switchMode('login')" class="text-gray-400 hover:text-white underline">Back to Login</button>`;
+                } else if (mode === 'phone') {
+                    title.textContent = "SMS Authentication Gateway";
+                    submitBtn.textContent = "Transmit Verification String";
+                    passContainer.classList.add('hidden');
+                    phoneContainer.classList.remove('hidden');
+                    footer.innerHTML = `<button onclick="authUI.switchMode('login')" class="text-gray-400 hover:text-white underline">Return to Identity Portal</button>`;
+                }
+            }
+        };
+
+        // TRACK AUTH AUTHENTICATION AND CORRESPONDING CLOUD DATABASES LISTENER
+        onAuthStateChanged(auth, (user) => {
+            globalUserContext = user;
+            const widget = document.getElementById('authWidgetContainer');
+            const listFeed = document.getElementById('projectListFeed');
+
+            if (user) {
+                widget.innerHTML = `
+                    <div class="flex items-center space-x-3 bg-[#1E293B] p-1.5 pr-3 rounded-xl border border-gray-700">
+                        <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-xs text-white font-bold">N</div>
+                        <span class="text-xs max-w-[100px] truncate font-medium text-gray-300">${user.email || 'OAuth User'}</span>
+                        <button id="logoutAppBtn" class="text-gray-400 hover:text-red-400 transition-colors">✕</button>
+                    </div>
+                `;
+                document.getElementById('logoutAppBtn').addEventListener('click', () => signOut(auth));
+
+                // Read user-specific storage keys from Realtime Database
+                onValue(ref(db, `users/${user.uid}/projects`), (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data) {
+                        listFeed.innerHTML = `<div class="text-center py-8 border border-dashed border-gray-800 rounded-xl px-2"><p class="text-xs text-gray-500">No active network nodes compiled.</p></div>`;
+                        return;
+                    }
+                    listFeed.innerHTML = Object.keys(data).map(key => `
+                        <div class="p-3 bg-[#1E293B]/50 border border-gray-800 rounded-xl">
+                            <div class="flex justify-between items-center text-xs font-semibold text-white">
+                                <span class="truncate">${data[key].name}</span>
+                                <span class="text-[9px] font-mono bg-blue-900/40 text-blue-400 px-1.5 py-0.5 rounded">Sync Active</span>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1">Nodes inside template: ${data[key].components?.length || 0}</p>
+                        </div>
+                    `).join('');
+                });
+            } else {
+                widget.innerHTML = `
+                    <button id="openAuthModalBtn" class="flex items-center space-x-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-all">
+                        <span>Access Account</span>
+                    </button>
+                `;
+                document.getElementById('openAuthModalBtn').addEventListener('click', () => document.getElementById('authGateModal').classList.remove('hidden'));
+                listFeed.innerHTML = `<div class="text-center py-8 border border-dashed border-gray-800 rounded-xl px-2"><p class="text-xs text-gray-500">Sign in to initialize live cloud sync listening blocks.</p></div>`;
+            }
+            lucide.createIcons();
+        });
+
+        // ACTION BUTTON CONNECTIONS INITIALIZATION
+        document.getElementById('openAuthModalBtn').addEventListener('click', () => document.getElementById('authGateModal').classList.remove('hidden'));
+        document.getElementById('closeAuthModalBtn').addEventListener('click', () => document.getElementById('authGateModal').classList.add('hidden'));
+        
+        document.getElementById('googleFederationBtn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                document.getElementById('authGateModal').classList.add('hidden');
+            } catch (err) { alert(err.message); }
+        });
+
+        document.getElementById('nexusCredentialForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmailField').value;
+            const password = document.getElementById('authPasswordField').value;
+
+            try {
+                if (currentAuthMode === 'login') {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    document.getElementById('authGateModal').classList.add('hidden');
+                } else if (currentAuthMode === 'register') {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    document.getElementById('authGateModal').classList.add('hidden');
+                } else if (currentAuthMode === 'reset') {
+                    await sendPasswordResetEmail(auth, email);
+                    authUI.showAlert('success', 'Reset context string transmitted to tracking registry inbox.');
+                } else if (currentAuthMode === 'phone') {
+                    authUI.showAlert('error', 'Phone OTP routing requires manual reCAPTCHA containers mapped inside the app runtime configuration.');
+                }
+            } catch (err) {
+                authUI.showAlert('error', err.message);
+            }
+        });
+
+        document.getElementById('saveProjectBtn').addEventListener('click', async () => {
+            if (canvasSchema.length === 0) return alert('Cannot upload an empty workspace layout model!');
+            const name = document.getElementById('projectTitleInput').value || 'Untitled Deploy';
+            const uid = globalUserContext ? globalUserContext.uid : 'anonymous';
+
+            try {
+                const targetRef = ref(db, `users/${uid}/projects`);
+                await set(push(targetRef), {
+                    name: name,
+                    timestamp: Date.now(),
+                    components: canvasSchema
+                });
+                alert('Workspace pipeline compiled and successfully saved to Realtime Database registry.');
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+
+        // Build runtime icons initialization step
+        lucide.createIcons();
+    </script>
 </body>
 </html>
